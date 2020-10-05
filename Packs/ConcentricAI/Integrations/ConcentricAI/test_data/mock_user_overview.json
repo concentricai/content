@@ -21,7 +21,7 @@
                                 "domain": "hotmail.com",
                                 "type": "external",
                                 "ext_int_user_link": [
-                                    "joe@concentric.ai"
+                                    "joe@company.com"
                                 ]
                             }
                         ]
@@ -35,10 +35,10 @@
                     "total_by_permitted_int_users": {
                         "buckets": [
                             {
-                                "key": "joe@concentric.ai",
+                                "key": "joe@company.com",
                                 "doc_count": 15,
                                 "name": "joe armstrong",
-                                "domain": "concentric.ai",
+                                "domain": "joe@company.com",
                                 "type": "internal",
                                 "ext_int_user_link": null
                             }

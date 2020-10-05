@@ -16,7 +16,7 @@
                             "risk_timestamp": "1600114903415",
                             "service": "sharepoint",
                             "owner": [
-                                "joe@concentric.ai"
+                                "joe@company.com"
                             ],
                             "risk": "high",
                             "path": "file-path"
