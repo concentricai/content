@@ -69,7 +69,7 @@ def test_fetch_incidents(requests_mock):
     mock_response = util_load_json('test_data/mock_incident.json')
     requests_mock.post('https://mock-url.com/graphql-demisto', json=mock_response['response'])
     _, new_incidents = fetch_incidents(loginClient, queryClient, last_run)
-    t = datetime.fromtimestamp(int('1600114903415')/1000)
+    t = datetime.fromtimestamp(int('1600114903415') / 1000)
     inced_time = t.strftime('%Y-%m-%dT%H:%M:%SZ')
     rawJson = '{"cid": "8f4619ebc927276a5908db0e46be2e7da14df3bd", "rule_name": "risk1,risk3", ' \
               '"service": "sharepoint", "name": "file-name-1", "file-path": "file-path", ' \

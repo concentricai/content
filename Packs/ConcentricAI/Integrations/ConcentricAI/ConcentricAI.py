@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple
+from typing import Dict
 
 import urllib3
 from CommonServerPython import *
@@ -32,7 +32,7 @@ LAST_FETCH = None
 RISK_RULES: dict
 SCROLL_ID_INCIDENT: str
 SCROLL_ID_FILE: str
-SCROll_ID_USER_DETAILS: str
+SCROLL_ID_USER_DETAIL: str
 
 
 def encoding(username, password):
@@ -45,6 +45,7 @@ def encoding(username, password):
 
 
 def get_headers_for_login():
+
     headers_for_login = {
         'Authorization': AUTHORIZATION,
         'X-Domain': DOMAIN,
@@ -66,11 +67,11 @@ def get_headers_for_query():
 
 
 def initialise_scrolls_and_rules():
-    global SCROll_ID_USER_DETAILS, SCROLL_ID_FILE, SCROLL_ID_INCIDENT, RISK_RULES
+    global SCROLL_ID_USER_DETAIL, SCROLL_ID_FILE, SCROLL_ID_INCIDENT, RISK_RULES
 
     SCROLL_ID_INCIDENT = ""
     SCROLL_ID_FILE = ""
-    SCROll_ID_USER_DETAILS = ""
+    SCROLL_ID_USER_DETAIL = ""
     RISK_RULES = {}
 
 
@@ -117,7 +118,7 @@ class QueryClient(BaseClient):
         global SCROLL_ID_INCIDENT
         try:
             payload = {
-                "query": "{ allAlerts(severity: ["+severity+", high] timerange: ["+from_time+","+to_time+"] pagination: { currentPage: "+pageIndex+" pageSize: 500 } _scroll_id: \""+SCROLL_ID_INCIDENT+"\") { allContents{rows { cid risk_id name risk_timestamp service owner risk path } _scroll_id pagination } } }"
+                "query": "{ allAlerts(severity: [" + severity + ", high] timerange: [" + from_time + "," + to_time + "] pagination: { currentPage: " + pageIndex + " pageSize: 500 } _scroll_id: \"" + SCROLL_ID_INCIDENT + "\") { allContents{rows { cid risk_id name risk_timestamp service owner risk path } _scroll_id pagination } } }"
             }
             res = self._http_request(
                 method='POST',
@@ -192,11 +193,6 @@ class QueryClient(BaseClient):
             payload = {
                 "query": "{\n  allContents: allContents(pagination: {currentPage: 1, pageSize: 1000} , aggregate: {fields: [ \"permitted_int_users\", \"permitted_ext_users\", \"permitted_grp_users\", \"permitted_orphans\"]}) {\n    allContents {\n  pagination\n   }\n    aggregations\n  }\n}\n"
             }
-            '''
-            payload = {
-                "query": "{\n  allContents: allContents(pagination: {currentPage: 1, pageSize: 1000} _scroll_id: \"" + SCROLL_ID_USER_OVERVIEW + "\", aggregate: {fields: [ \"permitted_int_users\", \"permitted_ext_users\", \"permitted_grp_users\", \"permitted_orphans\"]}) {\n    allContents {\n      pagination\n  _scroll_id  }\n    aggregations\n  }\n}\n"
-            }
-            '''
             res = self._http_request(
                 method='POST',
                 json_data=payload,
@@ -217,10 +213,10 @@ class QueryClient(BaseClient):
         return res
 
     def get_user_details(self, loginClient: LoginClient, user: str):
-        global SCROll_ID_USER_DETAILS
+        global SCROLL_ID_USER_DETAIL
         try:
             payload = {
-                "query": "{allContents( pagination: { currentPage: 1 pageSize: 500 } _scroll_id: \"" + SCROll_ID_USER_DETAILS + "\" filter: \"{ \\\"and\\\": [{\\\"in\\\":[\\\"" + user + "\\\", {\\\"var\\\":\\\"entitlement.name\\\"}]}]}\" ){ allContents{ rows { name, path, permitted_int_users, permitted_ext_users, permitted_grp_users, permitted_orphans} pagination _scroll_id } aggregations } }"
+                "query": "{allContents( pagination: { currentPage: 1 pageSize: 500 } _scroll_id: \"" + SCROLL_ID_USER_DETAIL + "\" filter: \"{ \\\"and\\\": [{\\\"in\\\":[\\\"" + user + "\\\", {\\\"var\\\":\\\"entitlement.name\\\"}]}]}\" ){ allContents{ rows { name, path, permitted_int_users, permitted_ext_users, permitted_grp_users, permitted_orphans} pagination _scroll_id } aggregations } }"
             }
 
             res = self._http_request(
@@ -242,7 +238,7 @@ class QueryClient(BaseClient):
 
         return res
 
-        
+
 def convert_to_demisto_severity(severity: str) -> int:
     return {
         'low': 1,  # low severity
@@ -288,7 +284,6 @@ def map_risk_rules(loginClient: LoginClient, queryClient: QueryClient):
 
 def transform_to_incidents(answers: list, risk_rules: dict):
     targets = []
-    target = dict
     for answer in answers:
         target = {
             'cid': answer['cid'],
@@ -329,7 +324,7 @@ def transform_user_details(answer):
     if answer['path'] is not None:
         target['file-path'] = answer['path']
     if 'permitted_ext_users' in answer and answer['permitted_ext_users'] is not None:
-        target['user-external'] = answer['permitted_ext_users']      
+        target['user-external'] = answer['permitted_ext_users']
     if 'permitted_grp_users' in answer and answer['permitted_grp_users'] is not None:
         target['users-group'] = answer['permitted_grp_users']
     if 'name' in answer and answer['name'] is not None:
@@ -367,21 +362,18 @@ def test_module(client: LoginClient):
         return 'ok'
 
 
-def fetch_incidents(loginClient: LoginClient, queryClient: QueryClient,
-        last_run: Dict[str, int]) -> Tuple[Dict[str, int], List[dict]]:
+def fetch_incidents(loginClient: LoginClient, queryClient: QueryClient, last_run: Dict[str, int]):
 
     last_fetch = last_run.get('last_fetch', None)
     if last_fetch is None:
         from_time = 0
-        to_time = datetime.now()
-        to_time = int(to_time.timestamp() * 1000)
+        to_time = int(datetime.now().timestamp() * 1000)
         last_fetch = int(to_time)
         to_time = last_fetch
     else:
         last_fetch = int(last_fetch)
         from_time = last_fetch
-        to_time = datetime.now()
-        to_time = int(to_time.timestamp() * 1000)
+        to_time = int(datetime.now().timestamp() * 1000)
 
     min_severity = demisto.getParam('min_severity')
     if min_severity is None:
@@ -403,8 +395,8 @@ def fetch_incidents(loginClient: LoginClient, queryClient: QueryClient,
         SCROLL_ID_INCIDENT = res['data']['allAlerts']['allContents']['_scroll_id']
         count = len(response)
         if(count == 0):
-           flag = False
-           if(total_count == 0):
+            flag = False
+            if(total_count == 0):
                 newAlerts = False
         else:
             answers.extend(response)
@@ -413,9 +405,7 @@ def fetch_incidents(loginClient: LoginClient, queryClient: QueryClient,
             if total_count == max_records:
                 break
 
-    incidents = List[dict]
-    incidents = []
-
+    incidents: List = []
     next_run = {'last_fetch': last_fetch}
     SCROLL_ID_INCIDENT = ""
     if newAlerts == False:
@@ -425,7 +415,7 @@ def fetch_incidents(loginClient: LoginClient, queryClient: QueryClient,
     targets = transform_to_incidents(answers, risk_dict)
 
     for row in targets:
-        t = datetime.fromtimestamp(int(row['risk_timestamp'])/1000)
+        t = datetime.fromtimestamp(int(row['risk_timestamp']) / 1000)
         inced_time = t.strftime(DATE_FORMAT)
         incident = {
             'name': row['name'],
@@ -445,7 +435,6 @@ def fetch_file_information(loginClient: LoginClient, queryClient: QueryClient, p
     answers: list = []
     max_records = None
 
-    # this is necessary to fetch all answers and on't return only with the first 8 entries.
     while(flag == True):
         res = queryClient.get_file_information(loginClient, path)
         response = res['data']['allContents']['allContents']['rows']
@@ -477,7 +466,7 @@ def fetch_file_information(loginClient: LoginClient, queryClient: QueryClient, p
         if answer[props] is not None:
             target[props] = answer[props]
 
-    risk_dict = map_risk_rules(loginClient,  queryClient)
+    risk_dict = map_risk_rules(loginClient, queryClient)
     target = transform_file_information(target, risk_dict)
     readable_output = tableToMarkdown('Information List', target)
 
@@ -505,7 +494,7 @@ def get_users_overview(loginClient: LoginClient, queryClient: QueryClient):
 
 def get_user_details(loginClient: LoginClient, queryClient: QueryClient, user: str):
     flag = True
-    global SCROLL_ID_USER_DETAILS
+    global SCROLL_ID_USER_DETAIL
     answers: list = []
     max_records = None
 
@@ -514,7 +503,7 @@ def get_user_details(loginClient: LoginClient, queryClient: QueryClient, user: s
         response = res['data']['allContents']['allContents']['rows']
         if max_records is None:
             max_records = res['data']['allContents']['allContents']['pagination']['totalRecords']
-        SCROLL_ID_USER_DETAILS = res['data']['allContents']['allContents']['_scroll_id']
+        SCROLL_ID_USER_DETAIL = res['data']['allContents']['allContents']['_scroll_id']
         count = len(response)
         if(count == 0):
             flag = False
@@ -524,6 +513,7 @@ def get_user_details(loginClient: LoginClient, queryClient: QueryClient, user: s
             if total_count == max_records:
                 break
 
+    SCROLL_ID_USER_DETAIL = ""
     results = []
     for answer in answers:
         target = transform_user_details(answer)

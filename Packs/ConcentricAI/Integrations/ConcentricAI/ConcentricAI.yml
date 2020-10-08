@@ -89,4 +89,4 @@ tests:
 - No tests (auto formatted)
 defaultmapperin: ConcentricAi-mapper
 defaultclassifier: ConcentricAi
-fromversion: 5.0.0
+fromversion: 6.0.0
