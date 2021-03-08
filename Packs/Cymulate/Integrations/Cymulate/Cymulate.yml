@@ -3,7 +3,7 @@ commonfields:
   id: Cymulate
   version: -1
 configuration:
-- display: x-token
+- display: X-token
   name: x-token
   required: true
   type: 4
@@ -32,8 +32,7 @@ configuration:
   required: false
   type: 8
 - defaultvalue: 1 hour
-  display: First fetch time range (<number> <time unit>, e.g., 1 hour, 30 minutes)
-    - Proofpoint supports maximum 1 hour fetch back
+  display: First fetch time range (<number> <time unit>, e.g., 1 hour, 30 minutes) - Proofpoint supports maximum 1 hour fetch back
   name: fetch_time
   required: false
   type: 0
@@ -96,7 +95,7 @@ script:
     - contextPath: Cymulate.Incident.Attack_ID
       description: The cymulate's Attack ID of the incident
       type: String
-  dockerimage: demisto/python3:3.8.5.10845
+  dockerimage: demisto/python3:3.9.1.15759
   feed: false
   isfetch: true
   longRunning: false
@@ -109,3 +108,4 @@ tests:
 - No tests
 defaultclassifier: Cymulate
 defaultmapperin: Cymulate-mapper
+fromversion: 5.0.0

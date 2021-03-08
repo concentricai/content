@@ -125,7 +125,7 @@ def fetch_incidents(client: MsGraphClient, fetch_time: str, fetch_limit: int, fi
     time_to = datetime.now().strftime(timestamp_format)
 
     # Get incidents from MS Graph Security
-    demisto.debug(f'Fetching MS Graph Security incidents. From: {time_from}. To: {time_to}\n')
+    demisto.debug(f'Fetching MS Graph Security incidents. From: {time_from}. To: {time_to}. Filter: {filter_query}')
     incidents = client.search_alerts(last_modified=None, severity=None, category=None, vendor=None, time_from=time_from,
                                      time_to=time_to, filter_query=filter_query)['value']
 
@@ -148,8 +148,6 @@ def fetch_incidents(client: MsGraphClient, fetch_time: str, fetch_limit: int, fi
             last_incident_time = demisto_incidents[-1].get('occurred')
             new_last_run.update({'time': last_incident_time})
 
-    if not demisto_incidents:
-        new_last_run.update({'time': time_to})
     demisto.setLastRun(new_last_run)
     return demisto_incidents
 
@@ -468,7 +466,7 @@ def test_function(client: MsGraphClient, args):
        Returns ok if successful.
        """
     response = client.ms_client.http_request(
-        method='GET', url_suffix='users', params={'$select': 'displayName'}, resp_type='response')
+        method='GET', url_suffix='security/alerts', params={'$top': 1}, resp_type='response')
     try:
         data = response.json() if response.text else {}
         if not response.ok:

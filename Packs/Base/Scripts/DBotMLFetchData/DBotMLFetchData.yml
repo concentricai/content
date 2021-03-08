@@ -6,7 +6,7 @@ args:
   required: false
   secret: false
 - default: false
-  defaultValue: Phishing
+  defaultValue: Phishing,*phish*
   description: A comma-separatetd list of incident types by which to filter.
   isArray: false
   name: incidentTypes
@@ -153,7 +153,9 @@ tags:
 - ml
 timeout: 100µs
 type: python
-dockerimage: demisto/fetch-data:1.0.0.10185
+dockerimage: demisto/fetch-data:1.0.0.14842
 tests:
 - No tests
 deprecated: true
+fromversion: 5.0.0
+runonce: true

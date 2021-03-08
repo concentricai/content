@@ -302,8 +302,8 @@ script:
       type: String
   - arguments:
     - default: false
-      description: The query line for the search. See the [GitHub documentation](https://help.github.com/en/articles/searching-issues-and-pull-requests)
-        for more information.
+      description: The query line for the search. For more information see the GitHub
+        documentation at https://help.github.com/en/articles/searching-issues-and-pull-requests.
       isArray: false
       name: query
       required: true
@@ -2596,7 +2596,8 @@ script:
       required: true
       secret: false
     deprecated: false
-    description: Gets the usage details of GitHub action workflows of private repositories, by repository owner.
+    description: Gets the usage details of GitHub action workflows of private repositories,
+      by repository owner.
     execution: false
     name: Github-get-github-actions-usage
     outputs:
@@ -2621,3 +2622,4 @@ script:
   script: '-'
   subtype: python3
   type: python
+fromversion: 5.0.0

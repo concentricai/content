@@ -13,6 +13,7 @@ tasks:
       name: ""
       iscommand: false
       brand: ""
+      description: ''
     nexttasks:
       '#none#':
       - "34"
@@ -20,8 +21,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2210,
-          "y": -1150
+          "x": 162.5,
+          "y": 50
         }
       }
     note: false
@@ -51,8 +52,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1985,
-          "y": 370
+          "x": 162.5,
+          "y": 2760
         }
       }
     note: false
@@ -87,8 +88,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1985,
-          "y": 545
+          "x": 162.5,
+          "y": 2935
         }
       }
     note: false
@@ -122,8 +123,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1985,
-          "y": 720
+          "x": 162.5,
+          "y": 3110
         }
       }
     note: false
@@ -155,8 +156,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2415,
-          "y": 545
+          "x": 162.5,
+          "y": 2235
         }
       }
     note: false
@@ -187,8 +188,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2415,
-          "y": 370
+          "x": 162.5,
+          "y": 2060
         }
       }
     note: false
@@ -211,7 +212,6 @@ tasks:
       brand: ""
     nexttasks:
       '#none#':
-      - "1"
       - "5"
     scriptarguments:
       all:
@@ -224,8 +224,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2200,
-          "y": 195
+          "x": 162.5,
+          "y": 1885
         }
       }
     note: false
@@ -281,8 +281,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1985,
-          "y": 1070
+          "x": 162.5,
+          "y": 3460
         }
       }
     note: false
@@ -327,8 +327,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1985,
-          "y": 895
+          "x": 162.5,
+          "y": 3285
         }
       }
     note: false
@@ -360,8 +360,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1985,
-          "y": 1245
+          "x": 162.5,
+          "y": 3635
         }
       }
     note: false
@@ -393,8 +393,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1985,
-          "y": 1420
+          "x": 162.5,
+          "y": 3810
         }
       }
     note: false
@@ -431,8 +431,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 70,
-          "y": 1865
+          "x": 162.5,
+          "y": 7280
         }
       }
     note: false
@@ -469,8 +469,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2650,
-          "y": 1865
+          "x": 162.5,
+          "y": 5180
         }
       }
     note: false
@@ -507,8 +507,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 3080,
-          "y": 1865
+          "x": 162.5,
+          "y": 4830
         }
       }
     note: false
@@ -545,8 +545,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 3510,
-          "y": 1865
+          "x": 162.5,
+          "y": 4480
         }
       }
     note: false
@@ -585,8 +585,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 500,
-          "y": 1865
+          "x": 162.5,
+          "y": 6930
         }
       }
     note: false
@@ -627,8 +627,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 930,
-          "y": 1865
+          "x": 162.5,
+          "y": 6580
         }
       }
     note: false
@@ -667,8 +667,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1360,
-          "y": 1865
+          "x": 162.5,
+          "y": 6230
         }
       }
     note: false
@@ -708,8 +708,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 3940,
-          "y": 1865
+          "x": 162.5,
+          "y": 4130
         }
       }
     note: false
@@ -752,8 +752,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2220,
-          "y": 1865
+          "x": 162.5,
+          "y": 5530
         }
       }
     note: false
@@ -790,8 +790,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1790,
-          "y": 1865
+          "x": 162.5,
+          "y": 5880
         }
       }
     note: false
@@ -819,8 +819,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 70,
-          "y": 2055
+          "x": 162.5,
+          "y": 7455
         }
       }
     note: false
@@ -841,6 +841,9 @@ tasks:
       type: regular
       iscommand: true
       brand: Infoblox
+    nexttasks:
+      '#none#':
+      - "11"
     scriptarguments:
       reference_id:
         simple: ${Infoblox.ModifiedResponsePolicyZoneRules(val.Name === 'nightly-test-mx-sub.infoblow.com').ReferenceID}
@@ -848,8 +851,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 500,
-          "y": 2055
+          "x": 162.5,
+          "y": 7105
         }
       }
     note: false
@@ -870,6 +873,9 @@ tasks:
       type: regular
       iscommand: true
       brand: Infoblox
+    nexttasks:
+      '#none#':
+      - "15"
     scriptarguments:
       reference_id:
         simple: ${Infoblox.ModifiedResponsePolicyZoneRules(val.Name === 'nightly-test-naptr-sub.infoblow.com').ReferenceID}
@@ -877,8 +883,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 930,
-          "y": 2055
+          "x": 162.5,
+          "y": 6755
         }
       }
     note: false
@@ -899,6 +905,9 @@ tasks:
       type: regular
       iscommand: true
       brand: Infoblox
+    nexttasks:
+      '#none#':
+      - "16"
     scriptarguments:
       reference_id:
         simple: ${Infoblox.ModifiedResponsePolicyZoneRules(val.Name === '0.0.0.0.in-addr.arpa.infoblow.com').ReferenceID}
@@ -906,8 +915,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1360,
-          "y": 2055
+          "x": 162.5,
+          "y": 6405
         }
       }
     note: false
@@ -928,6 +937,9 @@ tasks:
       type: regular
       iscommand: true
       brand: Infoblox
+    nexttasks:
+      '#none#':
+      - "17"
     scriptarguments:
       reference_id:
         simple: ${Infoblox.ModifiedResponsePolicyZoneRules(val.Name === 'nightly-test-txt-sub.infoblow.com').ReferenceID}
@@ -935,8 +947,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1790,
-          "y": 2055
+          "x": 162.5,
+          "y": 6055
         }
       }
     note: false
@@ -957,6 +969,9 @@ tasks:
       type: regular
       iscommand: true
       brand: Infoblox
+    nexttasks:
+      '#none#':
+      - "20"
     scriptarguments:
       reference_id:
         simple: ${Infoblox.ModifiedResponsePolicyZoneRules(val.Name === 'nightly-test-srv-sub.infoblow.com').ReferenceID}
@@ -964,8 +979,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2220,
-          "y": 2055
+          "x": 162.5,
+          "y": 5705
         }
       }
     note: false
@@ -986,6 +1001,9 @@ tasks:
       type: regular
       iscommand: true
       brand: Infoblox
+    nexttasks:
+      '#none#':
+      - "19"
     scriptarguments:
       reference_id:
         simple: ${Infoblox.ModifiedResponsePolicyZoneRules(val.Name === 'nightly-test-aaaa-sub.infoblow.com').ReferenceID}
@@ -993,8 +1011,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2650,
-          "y": 2055
+          "x": 162.5,
+          "y": 5355
         }
       }
     note: false
@@ -1015,6 +1033,9 @@ tasks:
       type: regular
       iscommand: true
       brand: Infoblox
+    nexttasks:
+      '#none#':
+      - "12"
     scriptarguments:
       reference_id:
         simple: ${Infoblox.ModifiedResponsePolicyZoneRules(val.Name === '3.3.3.3.infoblow.com').ReferenceID}
@@ -1022,8 +1043,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 3080,
-          "y": 2055
+          "x": 162.5,
+          "y": 5005
         }
       }
     note: false
@@ -1044,6 +1065,9 @@ tasks:
       type: regular
       iscommand: true
       brand: Infoblox
+    nexttasks:
+      '#none#':
+      - "13"
     scriptarguments:
       reference_id:
         simple: ${Infoblox.ModifiedResponsePolicyZoneRules(val.Name === '::1.infoblow.com').ReferenceID}
@@ -1051,8 +1075,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 3510,
-          "y": 2055
+          "x": 162.5,
+          "y": 4655
         }
       }
     note: false
@@ -1073,6 +1097,9 @@ tasks:
       type: regular
       iscommand: true
       brand: Infoblox
+    nexttasks:
+      '#none#':
+      - "14"
     scriptarguments:
       reference_id:
         simple: ${Infoblox.ModifiedResponsePolicyZoneRules(val.Name === 'nightly-test-rpz-sub.infoblow.com').ReferenceID}
@@ -1080,8 +1107,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 3940,
-          "y": 2055
+          "x": 162.5,
+          "y": 4305
         }
       }
     note: false
@@ -1102,6 +1129,9 @@ tasks:
       type: regular
       iscommand: true
       brand: Infoblox
+    nexttasks:
+      '#none#':
+      - "1"
     scriptarguments:
       reference_id:
         simple: ${Infoblox.ResponsePolicyZones(val.FQDN == 'infonlox.nightly.tpb.com').ReferenceID}
@@ -1109,8 +1139,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2415,
-          "y": 895
+          "x": 162.5,
+          "y": 2585
         }
       }
     note: false
@@ -1148,8 +1178,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2415,
-          "y": 720
+          "x": 162.5,
+          "y": 2410
         }
       }
     note: false
@@ -1183,8 +1213,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1940,
-          "y": -655
+          "x": 162.5,
+          "y": 1040
         }
       }
     note: false
@@ -1203,6 +1233,7 @@ tasks:
       type: title
       iscommand: false
       brand: ""
+      description: ''
     nexttasks:
       '#none#':
       - "35"
@@ -1210,8 +1241,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2210,
-          "y": -990
+          "x": 162.5,
+          "y": 195
         }
       }
     note: false
@@ -1234,7 +1265,6 @@ tasks:
       brand: ""
     nexttasks:
       '#none#':
-      - "33"
       - "40"
     scriptarguments:
       all:
@@ -1247,8 +1277,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2210,
-          "y": -850
+          "x": 162.5,
+          "y": 340
         }
       }
     note: false
@@ -1274,14 +1304,12 @@ tasks:
       - "37"
     scriptarguments:
       object_type:
-        simple: ${Infoblox.ResponsePolicyZoneRulesList(val.Comment.indexOf('nightly')
-          != -1 || val.Name.indexOf('nightly') != -1).Type}
+        simple: ${Infoblox.ResponsePolicyZoneRulesList(val.Comment.indexOf('nightly') != -1 || val.Name.indexOf('nightly') != -1).Type}
       output_fields: {}
       rule_name:
         complex:
           root: ${Infoblox
-          accessor: ResponsePolicyZoneRulesList(val.Comment.indexOf('nightly') !=
-            -1 || val.Name.indexOf('nightly') != -1).Name}
+          accessor: ResponsePolicyZoneRulesList(val.Comment.indexOf('nightly') != -1 || val.Name.indexOf('nightly') != -1).Name}
           transformers:
           - operator: concat
             args:
@@ -1293,8 +1321,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1940,
-          "y": -305
+          "x": 50,
+          "y": 1390
         }
       }
     note: false
@@ -1325,8 +1353,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1940,
-          "y": -125
+          "x": 50,
+          "y": 1565
         }
       }
     note: false
@@ -1345,24 +1373,16 @@ tasks:
       type: title
       iscommand: false
       brand: ""
+      description: ''
     nexttasks:
       '#none#':
-      - "15"
-      - "11"
-      - "16"
-      - "17"
-      - "20"
-      - "19"
-      - "12"
-      - "13"
-      - "14"
       - "18"
     separatecontext: false
     view: |-
       {
         "position": {
-          "x": 1985,
-          "y": 1610
+          "x": 162.5,
+          "y": 3985
         }
       }
     note: false
@@ -1381,6 +1401,7 @@ tasks:
       type: title
       iscommand: false
       brand: ""
+      description: ''
     nexttasks:
       '#none#':
       - "6"
@@ -1388,8 +1409,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2200,
-          "y": 50
+          "x": 162.5,
+          "y": 1740
         }
       }
     note: false
@@ -1419,8 +1440,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2460,
-          "y": -655
+          "x": 162.5,
+          "y": 515
         }
       }
     note: false
@@ -1443,7 +1464,7 @@ tasks:
       brand: ""
     nexttasks:
       '#none#':
-      - "39"
+      - "33"
     scriptarguments:
       reference_id:
         simple: ${Infoblox.ResponsePolicyZones(val.FQDN == 'infonlox.nightly.tpb.com').ReferenceID}
@@ -1451,8 +1472,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2460,
-          "y": -305
+          "x": 275,
+          "y": 865
         }
       }
     note: false
@@ -1473,7 +1494,7 @@ tasks:
       brand: ""
     nexttasks:
       '#default#':
-      - "39"
+      - "33"
       "yes":
       - "41"
     separatecontext: false
@@ -1488,8 +1509,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 2460,
-          "y": -475
+          "x": 162.5,
+          "y": 690
         }
       }
     note: false
@@ -1528,8 +1549,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 1940,
-          "y": -475
+          "x": 162.5,
+          "y": 1215
         }
       }
     note: false
@@ -1537,17 +1558,20 @@ tasks:
     ignoreworker: false
     skipunavailable: false
     quietmode: 0
+system: true
 view: |-
   {
     "linkLabelsPosition": {},
     "paper": {
       "dimensions": {
-        "height": 3300,
-        "width": 4250,
-        "x": 70,
-        "y": -1150
+        "height": 7500,
+        "width": 605,
+        "x": 50,
+        "y": 50
       }
     }
   }
 inputs: []
 outputs: []
+fromversion: 5.0.0
+description: ''

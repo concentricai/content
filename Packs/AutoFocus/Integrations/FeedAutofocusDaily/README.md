@@ -13,6 +13,7 @@ For more information click [here](https://docs.paloaltonetworks.com/autofocus/au
 | api_key | The AutoFocus API key. | True |
 | feedReputation | The indicator reputation. | False |
 | feedReliability | The source's reliability. | True |
+| tlp_color | The Traffic Light Protocol (TLP) designation to apply to indicators fetched from the feed. More information about the protocol can be found at https://us-cert.cisa.gov/tlp | False |
 | feedExpirationPolicy | The feed's expiration policy. | False |
 | feedExpirationInterval | The interval after which the feed expires. | False |
 | feedFetchInterval | The feed fetch interval. | False |
@@ -35,7 +36,7 @@ Note: This command does not create indicators within Cortex XSOAR.
 
 ##### Base Command
 
-`autofocus-get-indicators`
+`autofocus-daily-get-indicators`
 ##### Input
 
 | **Argument Name** | **Description** | **Required** |
@@ -49,7 +50,7 @@ Note: This command does not create indicators within Cortex XSOAR.
 There is no context output for this command.
 
 ##### Command Example
-```!autofocus-get-indicators limit=4```
+```!autofocus-daily-get-indicators limit=4```
 
 
 ##### Human Readable Output
@@ -62,4 +63,4 @@ There is no context output for this command.
 | demsito\<Span\>.com/some/aditional/path | URL |
 
 To bring the next batch of indicators run:
-`!autofocus-get-indicators limit=4 offset=4`
+`!autofocus-daily-get-indicators limit=4 offset=4`

@@ -8,11 +8,11 @@ configuration:
   name: api_url
   required: true
   type: 0
-- display: client_id
+- display: Client ID
   name: client_id
   required: true
   type: 0
-- display: client_secret
+- display: Client Secret
   name: client_secret
   required: true
   type: 0
@@ -24,8 +24,7 @@ configuration:
   name: proxy
   required: false
   type: 8
-description: Lists all of the security vulnerabilities for various products (OS,Applications)
-  etc)
+description: Lists all of the security vulnerabilities for various products (OS,Applications) etc)
 display: VulnDB
 name: VulnDB
 script:
@@ -361,8 +360,7 @@ script:
       required: false
       secret: false
     deprecated: false
-    description: Returns full details about a specific vulnerability, by vendor name and
-      product name.
+    description: Returns full details about a specific vulnerability, by vendor name and product name.
     execution: false
     name: vulndb-get-vuln-by-vendor-and-product-name
     outputs:
@@ -471,8 +469,7 @@ script:
       required: false
       secret: false
     deprecated: false
-    description: Returns full details about a specific vulnerability, by vendor ID and
-      product ID.
+    description: Returns full details about a specific vulnerability, by vendor ID and product ID.
     execution: false
     name: vulndb-get-vuln-by-vendor-and-product-id
     outputs:
@@ -902,7 +899,7 @@ script:
     - contextPath: CVE.Description
       description: A description of the CVE.
       type: String
-  dockerimage: demisto/python3:3.8.3.8715
+  dockerimage: demisto/python3:3.9.1.15759
   feed: false
   isfetch: false
   longRunning: false
@@ -913,3 +910,4 @@ script:
   type: python
 tests:
 - Test-VulnDB
+fromversion: 5.0.0

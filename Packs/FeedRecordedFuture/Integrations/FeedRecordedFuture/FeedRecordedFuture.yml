@@ -32,6 +32,16 @@ configuration:
   required: true
   type: 15
   additionalinfo: Reliability of the source providing the intelligence data
+- additionalinfo: The Traffic Light Protocol (TLP) designation to apply to indicators fetched from the feed
+  display: Traffic Light Protocol Color
+  name: tlp_color
+  options:
+  - RED
+  - AMBER
+  - GREEN
+  - WHITE
+  required: false
+  type: 15
 - display: ""
   name: feedExpirationPolicy
   defaultvalue: suddenDeath
@@ -96,6 +106,7 @@ configuration:
     Limit the indicators list to a specific risk rule. To see available
     risk rules run the rf-feed-get-risk-rules command. This parameter will only be
     used for the 'connectApi' service.
+    Using the 'large' risk rule is not recommended.
   display: Risk Rule
   hidden: false
   name: risk_rule
@@ -188,7 +199,7 @@ script:
     - contextPath: RecordedFutureFeed.RiskRule.Criticality
       description: The risk rule criticality.
       type: String
-  dockerimage: demisto/python3:3.8.5.10289
+  dockerimage: demisto/python3:3.9.1.15759
   feed: true
   isfetch: false
   longRunning: false

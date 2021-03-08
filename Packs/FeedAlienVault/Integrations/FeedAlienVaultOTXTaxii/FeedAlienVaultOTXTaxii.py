@@ -14,13 +14,12 @@ import dateutil.parser
 from bs4 import BeautifulSoup
 from netaddr import IPAddress, iprange_to_cidrs, IPNetwork
 from six import string_types
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 # Disable insecure warnings
 requests.packages.urllib3.disable_warnings()
 
 SOURCE_NAME = "Alien Vault OTX TAXII"
-
 
 # disable insecure warnings
 urllib3.disable_warnings()
@@ -413,38 +412,42 @@ class StixDecode(object):
 
         pprops = package_extract_properties(package)
 
-        observables = package.find_all('Observable')
-        for o in observables:
-            gprops = observable_extract_properties(o)
+        indicators = package.find_all('Indicator')
 
-            obj = next((ob for ob in o if ob.name == 'Object'), None)
-            if obj is None:
-                continue
+        for ind in indicators:
+            observables = ind.find_all('Observable')
+            for o in observables:
+                gprops = observable_extract_properties(o)
 
-            # main properties
-            properties = next((c for c in obj if c.name == 'Properties'), None)
-            if properties is not None:
-                for r in StixDecode.object_extract_properties(properties, kwargs):
-                    r.update(gprops)
-                    r.update(pprops)
+                obj = next((ob for ob in o if ob.name == 'Object'), None)
+                if obj is None:
+                    continue
 
-                    result.append(r)
-
-            # then related objects
-            related = next((c for c in obj if c.name == 'Related_Objects'), None)
-            if related is not None:
-                for robj in related:
-                    if robj.name != 'Related_Object':
-                        continue
-
-                    properties = next((c for c in robj if c.name == 'Properties'), None)
-                    if properties is None:
-                        continue
-
+                # main properties
+                properties = next((c for c in obj if c.name == 'Properties'), None)
+                if properties is not None:
                     for r in StixDecode.object_extract_properties(properties, kwargs):
                         r.update(gprops)
                         r.update(pprops)
+                        r.update({'added_time': ind.get('timestamp') + 'Z'})
+
                         result.append(r)
+
+                # then related objects
+                related = next((c for c in obj if c.name == 'Related_Objects'), None)
+                if related is not None:
+                    for robj in related:
+                        if robj.name != 'Related_Object':
+                            continue
+
+                        properties = next((c for c in robj if c.name == 'Properties'), None)
+                        if properties is None:
+                            continue
+
+                        for r in StixDecode.object_extract_properties(properties, kwargs):
+                            r.update(gprops)
+                            r.update(pprops)
+                            result.append(r)
 
         return timestamp, StixDecode._deduplicate(result)
 
@@ -452,7 +455,7 @@ class StixDecode(object):
 """ Alien Vault OTX TAXII Client """
 
 
-class Client():
+class Client:
     """Client for AlienVault OTX Feed - gets indicator lists from collections using TAXII client
 
         Attributes:
@@ -463,7 +466,7 @@ class Client():
             all_collections(bool): Whether to run on all active collections.
         """
     def __init__(self, api_key: str, collection: str, insecure: bool = False, proxy: bool = False,
-                 all_collections: bool = False, tags: list = []):
+                 all_collections: bool = False, tags: list = [], tlp_color: Optional[str] = None):
 
         taxii_client = cabby.create_client(discovery_path="https://otx.alienvault.com/taxii/discovery")
         taxii_client.set_auth(username=str(api_key), password="foo", verify_ssl=not insecure)
@@ -472,6 +475,7 @@ class Client():
 
         self.taxii_client = taxii_client
         self.tags = tags
+        self.tlp_color = tlp_color
 
         self.all_collections = all_collections
         if all_collections:
@@ -496,16 +500,24 @@ class Client():
             full_collection_list.append(collection.name)
         return full_collection_list
 
-    def build_iterator(self, collection):
+    def build_iterator(self, collection, begin_date=None):
         """Returns a list of all XML elements from the given collection.
 
         Args:
             collection(str): The collection name to fetch the elements from.
+            begin_date(datetime): what is the first date to fetch indicators from.
 
         Returns:
             list. A list of XML elements (strings).
         """
-        return list(self.taxii_client.poll(collection_name=collection))
+        if not begin_date:
+            begin_date, _ = parse_date_range(demisto.params().get('initial_interval'))
+
+        if begin_date.tzinfo is None:
+            begin_date = begin_date.replace(tzinfo=pytz.UTC)
+
+        # bring all the indicators created from the last date until now.
+        return list(self.taxii_client.poll(collection_name=collection, begin_date=begin_date))
 
     def decode_indicators(self, response):
         """Decode the XML response given using STIXDecode class.
@@ -536,7 +548,6 @@ def module_test_command(client: Client, args: Dict):
     failed_collections = []  # type:List
     for collection in client.collections:
         try:
-
             client.build_iterator(collection)
             passed_collections.append(collection)
 
@@ -569,14 +580,20 @@ def get_indicators_command(client: Client, args: Dict):
         str,dict,dict. The human readable, and rawJSON from the command - no context created.
     """
     limit = int(args.get('limit', 50))
-    indicator_list = fetch_indicators_command(client, limit)
+
+    if args.get('begin_date'):
+        begin_date, _ = parse_date_range(args.get('begin_date'))
+    else:
+        begin_date = None
+
+    indicator_list, _ = fetch_indicators_command(client, limit=limit, begin_date=begin_date)
 
     human_readable = tableToMarkdown("Indicators from AlienVault OTX TAXII:", indicator_list, removeNull=True)
 
     return human_readable, {}, indicator_list
 
 
-def parse_indicators(sub_indicator_list, full_indicator_list, tags):
+def parse_indicators(sub_indicator_list, full_indicator_list, tags, tlp_color):
     """Gets a decoded indicator list and returns a parsed version of the indicator with accordance with Demisto's
     Feed indicator standards.
 
@@ -584,6 +601,7 @@ def parse_indicators(sub_indicator_list, full_indicator_list, tags):
         tags(list): The tags to add to the indicator.
         sub_indicator_list(list): A list of STIXDecoded indicators
         full_indicator_list(list): A list of all the indicators fetched to this point - used to prevent duplications.
+        tlp_color(str): Traffic Light Protocol color.
 
     Returns:
         list,list. A list of parsed indicators and an updated list of all indicators polled
@@ -597,8 +615,11 @@ def parse_indicators(sub_indicator_list, full_indicator_list, tags):
         indicator['value'] = indicator['indicator']
         indicator['fields'] = {
             "description": indicator["stix_package_short_description"],
-            "tags": tags
+            "tags": tags,
+            "firstseenbysource": indicator.get('added_time')
         }
+        if tlp_color:
+            indicator['fields']['trafficlightprotocol'] = tlp_color
 
         temp_copy = indicator.copy()
 
@@ -611,12 +632,26 @@ def parse_indicators(sub_indicator_list, full_indicator_list, tags):
     return parsed_indicator_list, full_indicator_list
 
 
-def fetch_indicators_command(client: Client, limit=None):
+def get_latest_indicator_time(indicators_list):
+    if not indicators_list:
+        return None
+
+    latest_indicator_time = dateutil.parser.parse(indicators_list[0].get('added_time', '1970-01-01T00:00:00Z'))
+    for ind in indicators_list:
+        indicator_time = dateutil.parser.parse(ind.get('added_time', '1970-01-01T00:00:00Z'))
+        if indicator_time > latest_indicator_time:
+            latest_indicator_time = indicator_time
+
+    return latest_indicator_time
+
+
+def fetch_indicators_command(client: Client, limit=None, begin_date=None):
     """Fetch indicators from AlienVault OTX.
 
     Args:
         client(Client): The AlienVault OTX client.
         limit(any): How many XML elements to parse, None if all should be parsed.
+        begin_date(datetime): what is the first date to fetch indicators from.
 
     Returns:
         list. A list of indicators.
@@ -624,7 +659,7 @@ def fetch_indicators_command(client: Client, limit=None):
     indicator_list = []  # type:List
     for collection in client.collections:
         try:
-            taxii_iter = client.build_iterator(collection)
+            taxii_iter = client.build_iterator(collection, begin_date=begin_date)
 
         except Exception as e:
             if not client.all_collections:
@@ -639,20 +674,24 @@ def fetch_indicators_command(client: Client, limit=None):
             # the only_indicator_list is a list containing only the indicators themselves.
             # it is used to prevent duplicated indicators from being created in the system.
             # this is because AlienVault OTX can return the same indicator several times from the same collection.
-            parsed_list, only_indicator_list = parse_indicators(res, only_indicator_list, client.tags)
+            parsed_list, only_indicator_list = parse_indicators(res, only_indicator_list, client.tags, client.tlp_color)
             indicator_list.extend(parsed_list)
+
             if limit is not None and limit <= len(indicator_list):
                 indicator_list = indicator_list[:limit]
                 break
 
-    return indicator_list
+        latest_indicator_time = get_latest_indicator_time(indicator_list)
+
+    return indicator_list, latest_indicator_time
 
 
 def main():
     params = demisto.params()
     tags = argToList(params.get('feedTags'))
+    tlp_color = params.get('tlp_color')
     client = Client(params.get('api_key'), params.get('collections'), params.get('insecure'), params.get('proxy'),
-                    params.get('all_collections'), tags=tags)
+                    params.get('all_collections'), tags=tags, tlp_color=tlp_color)
 
     command = demisto.command()
     demisto.info(f'Command being called is {command}')
@@ -662,11 +701,31 @@ def main():
         'alienvaultotx-get-indicators': get_indicators_command
     }
     try:
+        integration_cache = demisto.getIntegrationContext()
+        begin_date = integration_cache.get('begin_date')
+
         if demisto.command() == 'fetch-indicators':
-            indicators = fetch_indicators_command(client)
+            if not begin_date:
+                begin_date = demisto.params().get('initial_interval')
+                if begin_date:
+                    begin_date, _ = parse_date_range(begin_date)
+
+            else:
+                begin_date = dateutil.parser.parse(begin_date)
+
+            indicators, latest_indicator_time = fetch_indicators_command(client, begin_date=begin_date)
             # we submit the indicators in batches
-            for b in batch(indicators, batch_size=2000):
-                demisto.createIndicators(b)
+            if indicators:
+                # if new indicators were found - submit them in batches, set the next begin_date
+                # to the time of the last indicator found
+                for b in batch(indicators, batch_size=2000):
+                    demisto.createIndicators(b)
+                demisto.setIntegrationContext({"begin_date": str(latest_indicator_time)})
+
+            else:
+                # if no indicators entered - dont change begin date.
+                demisto.setIntegrationContext({"begin_date": str(begin_date)})
+
         else:
             readable_output, outputs, raw_response = commands[command](client, demisto.args())
             return_outputs(readable_output, outputs, raw_response)

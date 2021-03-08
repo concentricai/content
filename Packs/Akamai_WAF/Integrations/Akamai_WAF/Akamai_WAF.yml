@@ -52,6 +52,33 @@ script:
       name: search
       required: false
       secret: false
+    - auto: PREDEFINED
+      default: false
+      defaultValue: 'true'
+      description: When enabled, provides additional response data identifying who
+        created and updated the list and when, and the network list’s deployment status
+        in both STAGING and PRODUCTION environments. This data takes longer to provide.
+      isArray: false
+      name: extended
+      predefined:
+      - 'true'
+      - 'false'
+      required: false
+      secret: false
+    - auto: PREDEFINED
+      default: false
+      defaultValue: 'true'
+      description: If enabled, the response list includes all items. For large network
+        lists, this may slow responses and yield large response objects. The default
+        false value when listing more than one network list omits the network list’s
+        elements and only provides higher-level metadata.
+      isArray: false
+      name: include_elements
+      predefined:
+      - 'true'
+      - 'false'
+      required: false
+      secret: false
     deprecated: false
     description: Returns a list of all network lists available for an authenticated
       user who belongs to a group.
@@ -216,7 +243,8 @@ script:
     name: akamai-delete-network-list
   - arguments:
     - default: false
-      description: ' A comma-seprated list of network list IDs to activate. For example: list (list1,list2). '
+      description: 'A comma-separated list of network list IDs to activate. For example:
+        list (list1,list2).'
       isArray: true
       name: network_list_ids
       required: true
@@ -224,7 +252,7 @@ script:
     - auto: PREDEFINED
       default: false
       description: The environment type to activate the network list. Can be "STAGING"
-        OR 'PRODUCTION".
+        OR "PRODUCTION".
       isArray: false
       name: env
       predefined:
@@ -290,8 +318,8 @@ script:
     name: akamai-remove-element-from-network-list
   - arguments:
     - default: false
-      description: ' A comma-separated list of network list IDs for which to get the activation status. For example: 
-        (support list - list1,list2).'
+      description: 'A comma-separated list of network list IDs for which to get the
+        activation status. For example: (support list - list1,list2).'
       isArray: true
       name: network_list_ids
       required: true
@@ -320,7 +348,7 @@ script:
     - contextPath: Akamai.NetworkLists.ActivationStatus.ProductionStatus
       description: The network list environment activation status.
       type: String
-  dockerimage: demisto/akamai:1.0.0.8883
+  dockerimage: demisto/akamai:1.0.0.13142
   feed: false
   isfetch: false
   longRunning: false
@@ -331,3 +359,4 @@ script:
   type: python
 tests:
 - Akamai_WAF-Test
+fromversion: 5.0.0

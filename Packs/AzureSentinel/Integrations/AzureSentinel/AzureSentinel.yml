@@ -74,7 +74,8 @@ configuration:
   name: proxy
   required: false
   type: 8
-description: Use the Azure Sentinel integration to get and manage incidents and get related entity information for incidents.
+description: Use the Azure Sentinel integration to get and manage incidents and get
+  related entity information for incidents.
 display: Azure Sentinel (Beta)
 name: Azure Sentinel
 script:
@@ -160,14 +161,16 @@ script:
   - arguments:
     - default: false
       defaultValue: '50'
-      description: The maximum number of incidents to return. The default and maximum value is 50.
+      description: The maximum number of incidents to return. The default and maximum
+        value is 50.
       isArray: false
       name: limit
       required: false
       secret: false
     - default: false
       description: 'Filter results using OData syntax. For example: properties/createdTimeUtc
-        gt 2020-02-02T14:00:00Z`). For more information see the Azure documentation: https://docs.microsoft.com/bs-latn-ba/azure/search/search-query-odata-filter.'
+        gt 2020-02-02T14:00:00Z`). For more information see the Azure documentation:
+        https://docs.microsoft.com/bs-latn-ba/azure/search/search-query-odata-filter.'
       isArray: false
       name: filter
       required: false
@@ -300,6 +303,32 @@ script:
       - Closed
       required: false
       secret: false
+    - auto: PREDEFINED
+      default: false
+      description: The reason the incident was closed. Required when updating the status
+        to Closed.
+      isArray: false
+      name: classification
+      predefined:
+      - BenignPositive
+      - FalsePositive
+      - TruePositive
+      - Undetermined
+      required: false
+      secret: false
+    - auto: PREDEFINED
+      default: false
+      description: The classification reason the incident was closed with. Required
+        when updating the status to Closed and the classification is determined.
+      isArray: false
+      name: classification_reason
+      predefined:
+      - InaccurateData
+      - IncorrectAlertLogic
+      - SuspiciousActivity
+      - SuspiciousButExpected
+      required: false
+      secret: false
     deprecated: false
     description: Updates a single incident in Azure Sentinel.
     execution: false
@@ -391,8 +420,8 @@ script:
       secret: false
     - default: false
       defaultValue: '50'
-      description: The maximum number of incident comments to return. The default and maximum value
-        is 50.
+      description: The maximum number of incident comments to return. The default
+        and maximum value is 50.
       isArray: false
       name: limit
       required: false
@@ -504,7 +533,8 @@ script:
       secret: false
     - default: false
       description: 'Filter results using OData syntax. For example: properties/createdTimeUtc
-        gt 2020-02-02T14:00:00Z`). For more information see the Azure documentation: https://docs.microsoft.com/bs-latn-ba/azure/search/search-query-odata-filter.'
+        gt 2020-02-02T14:00:00Z`). For more information see the Azure documentation:
+        https://docs.microsoft.com/bs-latn-ba/azure/search/search-query-odata-filter.'
       isArray: false
       name: filter
       required: false
@@ -538,10 +568,21 @@ script:
       name: entity_id
       required: true
       secret: false
+    - auto: PREDEFINED
+      default: false
+      defaultValue: 'false'
+      description: Whether or not to retrieve additional information about the entity.
+      isArray: false
+      name: expand_entity_information
+      predefined:
+      - 'false'
+      - 'true'
+      required: false
+      secret: false
     deprecated: false
     description: Gets a single entity from Azure Sentinel. Use the azure-sentinel-list-incident-relations
-      command, and get an entity ID to apply this command on. In the current
-      Azure Sentinel API version the retention period for GetEntityByID is 30 days.
+      command, and get an entity ID to apply this command on. In the current Azure
+      Sentinel API version the retention period for GetEntityByID is 30 days.
     execution: false
     name: azure-sentinel-get-entity-by-id
   - arguments:
@@ -553,7 +594,8 @@ script:
       secret: false
     - default: false
       defaultValue: '50'
-      description: The maximum number of relations to return. The default value is 50.
+      description: The maximum number of relations to return. The default value is
+        50.
       isArray: false
       name: limit
       required: false
@@ -577,7 +619,8 @@ script:
       secret: false
     - default: false
       description: 'Filter results using OData syntax. For example: properties/createdTimeUtc
-        gt 2020-02-02T14:00:00Z`). For more information see the Azure documentation: https://docs.microsoft.com/bs-latn-ba/azure/search/search-query-odata-filter.'
+        gt 2020-02-02T14:00:00Z`). For more information see the Azure documentation:
+        https://docs.microsoft.com/bs-latn-ba/azure/search/search-query-odata-filter.'
       isArray: false
       name: filter
       required: false
@@ -608,7 +651,8 @@ script:
     description: Tests connectivity to Azure Sentinel.
     execution: false
     name: azure-sentinel-test
-  dockerimage: demisto/crypto:1.0.0.303
+  dockerimage: demisto/crypto:1.0.0.14297
+  feed: false
   isfetch: true
   longRunning: false
   longRunningPort: false
@@ -616,6 +660,8 @@ script:
   script: '-'
   subtype: python3
   type: python
-beta: true
 tests:
-- No test - manual test playbook-TestAzureSentinelPlaybook is available in NonCircleTests folder
+- No test - manual test playbook-TestAzureSentinelPlaybook is available in NonCircleTests
+  folder
+fromversion: 5.0.0
+beta: true

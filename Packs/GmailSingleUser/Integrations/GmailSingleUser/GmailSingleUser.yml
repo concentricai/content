@@ -1,6 +1,6 @@
 category: Messaging
 beta: true
-fromversion: 4.5.0
+fromversion: 5.0.0
 commonfields:
   id: Gmail Single User
   version: -1
@@ -9,7 +9,8 @@ configuration:
   name: email
   required: true
   type: 0
-- display: Auth Code (run the !gmail-auth-link command to start the auth flow - see Detailed Instructions (?) section)
+- display: Auth Code (run the !gmail-auth-link command to start the auth flow - see
+    Detailed Instructions (?) section)
   name: code
   required: false
   type: 4
@@ -32,6 +33,12 @@ configuration:
   type: 0
 - display: Events query (e.g., "from:example@demisto.com")
   name: query
+  required: false
+  type: 0
+- defaultvalue: '50'
+  display: Maximum number of emails to pull per fetch
+  additionalinfo: A maximum of 200 emails per fetch (even if a higher number is configured). Default is 50.
+  name: fetch_limit
   required: false
   type: 0
 - display: Trust any certificate (not secure)
@@ -108,7 +115,8 @@ script:
       required: false
       secret: false
     - default: false
-      description: A comma-separated list of CID images to embed attachments to the email.
+      description: A comma-separated list of CID images to embed attachments in to the
+        email.
       isArray: true
       name: attachCIDs
       required: false
@@ -200,9 +208,9 @@ script:
     description: Starts the OAuth2 process. Get a link to use to authenticate to Gmail.
   - name: gmail-auth-test
     arguments: []
-    description: Tests that Gmail auth is properly configured. Use this command after completing
-      the OAuth2 authentication process.
-  dockerimage: demisto/google-api-py3:1.0.0.4554
+    description: Tests that Gmail auth is configured properly. Use this command after
+      completing the OAuth2 authentication process.
+  dockerimage: demisto/google-api-py3:1.0.0.14611
   isfetch: true
   longRunning: false
   longRunningPort: false
@@ -211,6 +219,6 @@ script:
   type: python
   subtype: python3
 tests:
-  - Gmail Single User - Test
+- Gmail Single User - Test
 defaultclassifier: Gmail Single User
 defaultmapperin: Gmail Single User-mapper

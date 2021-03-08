@@ -36,8 +36,7 @@ script:
       required: true
       description: A SQL query to perform on the Vertica database.
     - name: limit
-      description: The maximum number of results to be returned from the query. (Use
-        0 for all results)
+      description: The maximum number of results to be returned from the query. (Use 0 for all results)
       defaultValue: "50"
     outputs:
     - contextPath: Vertica.Query
@@ -47,8 +46,9 @@ script:
       description: The content of rows.
       type: string
     description: Executes a query on the Vertica database.
-  dockerimage: demisto/vertica:1.0.0.150
+  dockerimage: demisto/vertica:1.0.0.12410
   runonce: false
   subtype: python3
 tests:
 - Vertica Test
+fromversion: 5.0.0

@@ -322,8 +322,7 @@ tasks:
       id: e8589c31-7f5c-4cac-8852-609ddd91003e
       version: -1
       name: Get network lists command
-      description: Returns a list of all network lists available for an authenticated
-        user who belongs to a group.
+      description: Returns a list of all network lists available for an authenticated user who belongs to a group.
       script: '|||akamai-get-network-lists'
       type: regular
       iscommand: true
@@ -332,6 +331,10 @@ tasks:
       '#none#':
       - "10"
     scriptarguments:
+      extended:
+        simple: "false"
+      include_elements:
+        simple: "false"
       list_type:
         simple: IP
       search: {}
@@ -533,3 +536,4 @@ view: |-
   }
 inputs: []
 outputs: []
+fromversion: 5.0.0

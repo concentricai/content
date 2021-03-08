@@ -11,10 +11,7 @@ configuration:
   name: use_ssl
   required: false
   type: 8
-- display: |-
-    ┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉
-    ‎                                   Certificate Settings
-    CA certificate of Kafka server (.cer)
+- display: CA certificate of Kafka server (.cer)
   name: ca_cert
   required: false
   type: 12
@@ -30,10 +27,7 @@ configuration:
   name: additional_password
   required: false
   type: 4
-- display: |-
-    ┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉┉
-    ‎                               Fetch Incidents Settings
-    Topic to fetch incidents from (Required for fetch incidents)
+- display: Topic to fetch incidents from (Required for fetch incidents)
   name: topic
   required: false
   type: 0
@@ -41,9 +35,7 @@ configuration:
   name: partition
   required: false
   type: 0
-- additionalinfo: The initial offset to start fetching from, not including the value
-    set (e.g. if 3 is set, the first event that will be fetched will be with offset
-    4).
+- additionalinfo: The initial offset to start fetching from, not including the value set (e.g. if 3 is set, the first event that will be fetched will be with offset 4).
   display: Offset to fetch messages from (Exclusive)
   name: offset
   required: false
@@ -127,8 +119,7 @@ script:
       secret: false
     - default: false
       defaultValue: Earliest
-      description: Message offset to filter by. Acceptable values are 'Earliest',
-        'Latest', or any other offest number.
+      description: Message offset to filter by. Acceptable values are 'Earliest', 'Latest', or any other offest number.
       isArray: false
       name: offset
       required: false
@@ -171,7 +162,7 @@ script:
     - contextPath: Kafka.Topic.Partition
       description: Prints all partitions for a topic.
       type: number
-  dockerimage: demisto/pykafka:1.0.0.9548
+  dockerimage: demisto/pykafka:1.0.0.15212
   feed: false
   isfetch: true
   longRunning: false
@@ -182,3 +173,4 @@ script:
   type: python
 tests:
 - No Test - Can not connect to instance from remote
+fromversion: 5.0.0

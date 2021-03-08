@@ -2,6 +2,7 @@ id: cveReputation Test
 version: -1
 name: cveReputation Test
 starttaskid: "0"
+
 tasks:
   "0":
     id: "0"
@@ -96,3 +97,4 @@ view: |-
   }
 inputs: []
 outputs: []
+fromversion: 5.0.0

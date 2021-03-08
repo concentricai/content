@@ -135,7 +135,7 @@ tasks:
         simple: "10"
       dt:
         simple: PAN-OS-BPA.JobResults(val.Status!='complete').JobID
-    separatecontext: false
+    separatecontext: true
     loop:
       iscommand: false
       exitCondition: ""
@@ -427,3 +427,4 @@ view: |-
   }
 inputs: []
 outputs: []
+fromversion: 5.0.0

@@ -197,7 +197,7 @@ To mention a user in the message, add a semicolon ";" at the end of the user men
 | --- | --- | --- |
 | channel | The channel to which to send messages. | Optional | 
 | message | The message to send to the channel or team member. | Optional | 
-| team_member | The team member to which to send the message. | Optional | 
+| team_member | Display name or email address of the team member to send the message to. | Optional |
 | team | The team in which the specified channel exists. The team must already exist, and this value will override the default channel configured in the integration parameters. | Optional | 
 | adaptive_card | The Microsoft Teams adaptive card to send. | Optional | 
 
@@ -446,6 +446,8 @@ You can send the message `help` in order to see the supported commands:
 
 
 2. If you see the following error message: `Error in API call to Microsoft Teams: [403] - UnknownError`, then it means the AAD application has insufficient permissions.
+
+3. Since the integration works based on Docker port mapping, it can't function if the Docker is set to run with the host networking (`--network=host`). For more details, refer to the [Docker documentation](https://docs.docker.com/network/host/).
 
 ## Download Demisto Bot
 

@@ -731,7 +731,6 @@ def fetch_incidents():
     """
     Fetch incidents for Demisto
     """
-    now = int((datetime.utcnow() - datetime.utcfromtimestamp(0)).total_seconds() * 1000)
     last_run = demisto.getLastRun()
     demisto.info("IntSight fetch last run time is: {}".format(str(last_run)))
     if not last_run or 'time' not in last_run:
@@ -739,11 +738,12 @@ def fetch_incidents():
     else:
         fetch_delta = last_run.get('time')
 
+    current_fetch = fetch_delta
     alert_type = demisto.getParam('type')
     min_severity_level = demisto.params().get('severity_level', 'All')
     if min_severity_level not in SEVERITY_LEVEL:
-        raise Exception("Minimum Alert severity level to fetch incidents incidents from, allowed values are: ''All'',"
-                        " ''Low'', ''Medium'',''High''(Setting to All will fetch all incidents)")
+        raise Exception("Minimum Alert severity level to fetch incidents incidents from, allowed values are: All,"
+                        " Low, Medium, High. (Setting to All will fetch all incidents)")
 
     _, alerts_context = get_alerts_helper(handle_filters(fetch_delta))
     incidents = []
@@ -756,8 +756,12 @@ def fetch_incidents():
                     'severity': translate_severity(alert.get('Severity')),
                     'rawJSON': json.dumps(alert)
                 })
+                alert_timestamp = date_to_timestamp(alert.get('FoundDate'), date_format='%Y-%m-%dT%H:%M:%S.%fZ')
+                if alert_timestamp > current_fetch:
+                    current_fetch = alert_timestamp
+
     demisto.incidents(incidents)
-    demisto.setLastRun({'time': now})
+    demisto.setLastRun({'time': current_fetch + 1000})
 
 
 def get_iocs():
@@ -929,7 +933,7 @@ def test_module():
         min_severity_level = demisto.params().get('severity_level', 'All')
         if min_severity_level not in SEVERITY_LEVEL:
             return_error("Minimum Alert severity level to fetch incidents incidents from, allowed values are: "
-                         "''All'', ''Low'', ''Medium'',''High''(Setting to All will fetch all incidents)")
+                         "All, Low, Medium, High. (Setting to All will fetch all incidents)")
 
     demisto.results('ok')
 

@@ -240,7 +240,7 @@ script:
       required: false
       secret: false
     - default: false
-      description: 'The date range in which to search for sessions. Format: YYY Y-MM-DDTHH:MM:SS,YYYY-MM-DDTHH:MM:SS
+      description: 'The date range in which to search for sessions. Format: YYYY-MM-DDTHH:MM:SS,YYYY-MM-DDTHH:MM:SS
         where the first date is the beginning and the second is the end. Example:
         2019-09-09T00:00:00,2019-09-09T23:01:59'
       isArray: false
@@ -873,6 +873,18 @@ script:
     - contextPath: File.SHA256
       description: SHA256 hash of the file.
       type: String
+    - contextPath: File.Tags.TagGroups.TagGroupName
+      description: The tag's group name.
+      type: String
+    - contextPath: File.Tags.Aliases
+      description: Aliases of the tags.
+      type: String
+    - contextPath: File.Tags.PublicTagName
+      description: The public name of the tag. This is usually used as the ID of the tag.
+      type: String
+    - contextPath: File.Tags.TagName
+      description: The simple name of the tag.
+      type: String
     - contextPath: AutoFocus.File.IndicatorValue
       description: SHA256 of the file.
       type: String
@@ -933,7 +945,8 @@ script:
       description: The vendor used to calculate the score.
       type: String
     - contextPath: DBotScore.Score
-      description: The actual score.
+      description:
+        The actual score.
       type: Number
     - contextPath: DBotScore.Type
       description: The indicator type.
@@ -1045,8 +1058,7 @@ script:
     - contextPath: Domain.Name
       description: The domain name.
       type: String
-  dockerimage45: demisto/python3:3.7.2.214
-  dockerimage: demisto/python3:3.8.3.8715
+  dockerimage: demisto/python3:3.9.1.15759
   isfetch: false
   longRunning: false
   longRunningPort: false
@@ -1056,3 +1068,4 @@ script:
   type: python
 tests:
 - AutoFocus V2 test
+fromversion: 5.0.0
